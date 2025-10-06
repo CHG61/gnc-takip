@@ -1,0 +1,17 @@
+{% extends "admin/change_list.html" %}
+{% load i18n %}
+
+{% block object-tools-items %}
+  {{ block.super }}
+  <li>
+    <form action="{{ export_monthly_url }}" method="get" style="display:flex; gap:.5rem; align-items:center;">
+      <label>Yıl:
+        <input type="number" name="year" value="{{ request.GET.year|default:None }}" style="width:6rem;">
+      </label>
+      <label>Ay:
+        <input type="number" name="month" min="1" max="12" value="{{ request.GET.month|default:None }}" style="width:4rem;">
+      </label>
+      <button type="submit" class="button">{% translate "Ay Sonu Excel" %}</button>
+    </form>
+  </li>
+{% endblock %}

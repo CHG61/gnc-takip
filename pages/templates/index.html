@@ -1,0 +1,358 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4 overflow-hidden">
+
+  <!-- Üst başlık / logo -->
+  <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+    <img src="{% static 'images/GNC.png' %}" width="42" height="42" class="me-2 rounded img-fluid" alt="logo">
+    <div class="me-auto">
+      <h4 class="mb-0 text-break">GNC Takip</h4>
+      <small class="text-muted text-break">Stok Yönetim Sistemi</small>
+    </div>
+    <div class="ms-auto">
+      <a class="btn btn-success" href="{% url 'admin:index' %}" target="_blank">
+        <i class="fa-solid fa-user-shield me-1"></i> Admin Paneli
+      </a>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <ul class="nav nav-tabs flex-wrap" id="kssTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="dash-tab" data-bs-toggle="tab" data-bs-target="#dash" type="button" role="tab">
+        <i class="fa-solid fa-gauge-high me-1"></i> Dashboard
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="urun-tab" data-bs-toggle="tab" data-bs-target="#urunler" type="button" role="tab">
+        <i class="fa-solid fa-boxes-stacked me-1"></i> Ürünler ({{ total_products }})
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="gecmis-tab" data-bs-toggle="tab" data-bs-target="#gecmis" type="button" role="tab">
+        <i class="fa-solid fa-clock-rotate-left me-1"></i> İşlem Geçmişi
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content border-start border-end border-bottom p-3 rounded-bottom overflow-hidden" id="kssTabsContent">
+
+    <!-- DASHBOARD (dokunmadım) -->
+    <div class="tab-pane fade show active" id="dash" role="tabpanel">
+      <div class="row g-3">
+        <div class="col-6 col-md-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="text-muted text-break">Toplam Ürün</span>
+                <i class="fa-solid fa-cubes"></i>
+              </div>
+              <h3 class="mt-2 mb-0 text-break">{{ total_products }}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="text-muted text-break">Toplam Değer</span>
+                <i class="fa-solid fa-sack-dollar"></i>
+              </div>
+              <h3 class="mt-2 mb-0 text-break">₺{{ total_value|floatformat:2 }}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="text-muted text-break">Bugün Giriş</span>
+                <i class="fa-solid fa-arrow-trend-up"></i>
+              </div>
+              <h3 class="mt-2 mb-0 text-break">{{ today_in }}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="text-muted text-break">Bugün Çıkış</span>
+                <i class="fa-solid fa-arrow-trend-down"></i>
+              </div>
+              <h3 class="mt-2 mb-0 text-break">{{ today_out }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 mt-1">
+        <div class="col-6 col-md-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="text-muted text-break">Toplam Stok</span>
+                <i class="fa-solid fa-layer-group"></i>
+              </div>
+              <h3 class="mt-2 mb-0 text-break">{{ total_qty }}</h3>
+              <small class="text-muted">çuval</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="text-muted text-break">Düşük / Tükenen</span>
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </div>
+              <h3 class="mt-2 mb-0 text-break">{{ low_stock_count }}</h3>
+              <small class="text-muted text-break">Tükenen: {{ out_of_stock_count }}</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="text-muted text-break">7 Gün Giriş</span>
+                <i class="fa-solid fa-right-to-bracket"></i>
+              </div>
+              <h3 class="mt-2 mb-0 text-break">{{ week_in }}</h3>
+              <small class="text-muted">çuval</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="text-muted text-break">7 Gün Çıkış / Net</span>
+                <i class="fa-solid fa-right-from-bracket"></i>
+              </div>
+              <h3 class="mt-2 mb-0 text-break">{{ week_out }}</h3>
+              <small class="text-muted">
+                Net:
+                {% if week_net >= 0 %}
+                  <span class="text-success">+{{ week_net }}</span>
+                {% else %}
+                  <span class="text-danger">{{ week_net }}</span>
+                {% endif %}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 mt-1">
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white"><strong>En Aktif Ürünler (7 Gün)</strong></div>
+            <ul class="list-group list-group-flush">
+              {% if active_products %}
+                {% for ap in active_products %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                    <span class="text-break">{{ ap.product__name }}</span>
+                    <span class="fw-semibold text-break">{{ ap.total }} çuval</span>
+                  </li>
+                {% endfor %}
+              {% else %}
+                <li class="list-group-item text-muted">Henüz hareket yok.</li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white"><strong>Popüler İşlem Sebepleri (7 Gün)</strong></div>
+            <ul class="list-group list-group-flush">
+              {% if popular_reasons %}
+                {% for r in popular_reasons %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                    <span class="text-break">{{ r.reason }} ({{ r.move_type }})</span>
+                    <span class="fw-semibold text-break">{{ r.total }} çuval</span>
+                  </li>
+                {% endfor %}
+              {% else %}
+                <li class="list-group-item text-muted">Henüz işlem yok.</li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 mt-1">
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white"><strong>Azalan Malzemeler (7 Gün)</strong></div>
+            <ul class="list-group list-group-flush">
+              {% if decreasing_products %}
+                {% for it in decreasing_products %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                    <span class="text-break">{{ it.product__name }}</span>
+                    <span class="fw-semibold text-danger text-break">{{ it.net }}</span>
+                  </li>
+                {% endfor %}
+              {% else %}
+                <li class="list-group-item text-muted">Son 7 günde azalan ürün yok.</li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+              <strong>Son İşlemler</strong>
+              <small class="text-muted">(10)</small>
+            </div>
+            <ul class="list-group list-group-flush">
+              {% if recent_movements %}
+                {% for m in recent_movements %}
+                  <li class="list-group-item d-flex justify-content-between align-items-start flex-wrap">
+                    <div class="me-2">
+                      <div class="fw-semibold text-break">
+                        {{ m.product.name }}
+                        {% if m.move_type == "IN" %}
+                          <span class="text-success">(+{{ m.quantity }})</span>
+                        {% else %}
+                          <span class="text-danger">(-{{ m.quantity }})</span>
+                        {% endif %}
+                      </div>
+                      <small class="text-muted text-break">{{ m.created_at|date:"d.m.Y H:i" }} • {{ m.reason }}</small>
+                    </div>
+                    {% if m.note %}<small class="text-muted ms-2 text-break">{{ m.note }}</small>{% endif %}
+                  </li>
+                {% endfor %}
+              {% else %}
+                <li class="list-group-item text-muted">Henüz işlem yok.</li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mt-3">
+        <div class="card-header bg-white">
+          <strong>Uyarılar</strong> — Min. stok altı ürünler
+        </div>
+        <div class="list-group list-group-flush">
+          {% if low_stock %}
+            {% for p in low_stock %}
+              <div class="list-group-item d-flex align-items-center flex-wrap">
+                <img src="{{ p.image_src }}" width="46" class="rounded me-2 img-fluid" alt="{{ p.name }}">
+                <div class="me-auto">
+                  <div class="fw-semibold text-break">{{ p.name }}</div>
+                  <small class="text-muted text-break">Min: {{ p.min_stock }} • Mevcut: {{ p.current_qty }}</small>
+                </div>
+                <span class="badge bg-danger">Düşük Stok</span>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="list-group-item text-muted">Tüm ürünler min. stok üstünde. 🎉</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- ÜRÜNLER -->
+    <div class="tab-pane fade" id="urunler" role="tabpanel">
+      {% for p in products %}
+        <div class="card shadow-sm mb-3 overflow-hidden">
+          <div class="card-body">
+            <div class="row g-3 align-items-center">
+              <!-- Görsel -->
+              <div class="col-3 col-md-auto order-0">
+                <img src="{{ p.image_src }}" width="90" class="rounded img-fluid" alt="{{ p.name }}">
+              </div>
+
+              <!-- Metinler -->
+              <div class="col-9 col-md order-1">
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                  <h5 class="mb-0 me-2 text-break">{{ p.name }}</h5>
+                  {% if p.stock_ok %}
+                    <span class="badge bg-success">Stok OK</span>
+                  {% else %}
+                    <span class="badge bg-danger">Düşük</span>
+                  {% endif %}
+                </div>
+
+                <div class="text-muted small mt-1 text-break">
+                  {{ p.description }}
+                </div>
+
+                <!-- Teknik bilgiler: XS'te 1 sütun, SM+ 2 sütun -->
+                <div class="row row-cols-1 row-cols-sm-2 g-2 small mt-2">
+                  <div class="text-break"><strong>Birim Fiyat:</strong> ₺{{ p.unit_price }}</div>
+                  <div class="text-break"><strong>Min. Stok:</strong> {{ p.min_stock }} çuval</div>
+                  <div class="text-break"><strong>Kategori:</strong> {{ p.category }}</div>
+                  <div class="text-break">
+                    <strong>Palet ({{ p.pallet_size }} çuval):</strong>
+                    ₺{{ p.pallet_price|floatformat:2 }}
+                  </div>
+                </div>
+
+                <div class="alert alert-light py-2 mt-2 mb-0 text-break">
+                  <strong>Toplam Stok Değeri:</strong> ₺{{ p.total_value|floatformat:2 }}
+                </div>
+              </div>
+
+              <!-- Miktar bloğu: mobilde en altta tam genişlik -->
+              <hr class="d-md-none my-0">
+              <div class="col-12 col-md-auto order-3 order-md-2 text-center text-md-end pt-2 pt-md-0">
+                <div class="display-6 mb-0 text-break">{{ p.current_qty }}</div>
+                <div class="text-muted">çuval</div>
+                <div class="text-muted small text-break">{{ p.pallet_stock_text }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="text-muted">Henüz ürün yok. Admin panelinden ekleyin.</div>
+      {% endfor %}
+    </div>
+
+    <!-- İŞLEM GEÇMİŞİ -->
+    <div class="tab-pane fade" id="gecmis" role="tabpanel">
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th class="text-break">Tarih</th>
+              <th class="text-break">Ürün</th>
+              <th class="text-break">Tür</th>
+              <th class="text-break">Sebep</th>
+              <th class="text-break">Miktar</th>
+              <th class="text-break">Not</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for m in movements %}
+              <tr>
+                <td class="text-break">{{ m.created_at|date:"d.m.Y H:i" }}</td>
+                <td class="text-break">{{ m.product.name }}</td>
+                <td class="text-break">
+                  {% if m.move_type == "IN" %}
+                    <span class="text-success">Giriş (+)</span>
+                  {% else %}
+                    <span class="text-danger">Çıkış (-)</span>
+                  {% endif %}
+                </td>
+                <td class="text-break">{{ m.reason }}</td>
+                <td class="fw-semibold text-break">{{ m.quantity }} {{ m.unit }}</td>
+                <td class="text-break">{{ m.note }}</td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="6" class="text-muted">Henüz işlem yok.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <small class="text-muted">Tam liste: Admin &raquo; Stok hareketleri.</small>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

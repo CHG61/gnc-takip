@@ -1,0 +1,92 @@
+[
+  {
+    "model": "pages.product",
+    "pk": 1,
+    "fields": {
+      "name": "BONAFIX Hazır Sıva 25kg",
+      "description": "Duvar yüzeylerine uygulanan, hazır karışım sıva. Kolay uygulanır, düzgün yüzey sağlar.",
+      "unit_price": "89.23",
+      "min_stock": 32,
+      "category": "Yapı Kimyasalları",
+      "current_qty": 704,
+      "pallet_size": 64,
+      "image_static": "hazirsiva.jpg",
+      "created_at": "2025-10-05T12:00:00Z"
+    }
+  },
+  {
+    "model": "pages.product",
+    "pk": 2,
+    "fields": {
+      "name": "BONATHERM Isı Yalıtım Levha Yapıştırıcısı 25kg",
+      "description": "Mantolama sistemlerinde kullanılan yapıştırma harcı.",
+      "unit_price": "97.72",
+      "min_stock": 32,
+      "category": "Isı Yalıtım",
+      "current_qty": 1280,
+      "pallet_size": 64,
+      "image_static": "levhayapistirici.jpg",
+      "created_at": "2025-10-05T12:00:00Z"
+    }
+  },
+  {
+    "model": "pages.product",
+    "pk": 3,
+    "fields": {
+      "name": "BONATHERM Isı Yalıtım Sıvası 25kg",
+      "description": "Isı yalıtım levhaları üstü sıva.",
+      "unit_price": "97.06",
+      "min_stock": 32,
+      "category": "Isı Yalıtım",
+      "current_qty": 1664,
+      "pallet_size": 64,
+      "image_static": "isiyalitimsiva.jpg",
+      "created_at": "2025-10-05T12:00:00Z"
+    }
+  },
+  {
+    "model": "pages.product",
+    "pk": 4,
+    "fields": {
+      "name": "BONAFIX Power 300 Karo Seramik Yapıştırıcı 25kg",
+      "description": "Seramik/fayans yapıştırıcı.",
+      "unit_price": "110.78",
+      "min_stock": 32,
+      "category": "Yapıştırıcı",
+      "current_qty": 3584,
+      "pallet_size": 64,
+      "image_static": "karoseramikyapis.jpg",
+      "created_at": "2025-10-05T12:00:00Z"
+    }
+  },
+  {
+    "model": "pages.product",
+    "pk": 5,
+    "fields": {
+      "name": "BONATHERM Çizgi Dokulu Dekoratif Sıva 25kg",
+      "description": "Çizgi dokulu dış cephe sıvası.",
+      "unit_price": "159.06",
+      "min_stock": 32,
+      "category": "Dekoratif Sıva",
+      "current_qty": 0,
+      "pallet_size": 64,
+      "image_static": "dekoratifsiva.jpg",
+      "created_at": "2025-10-05T12:00:00Z"
+    }
+  },
+  {
+    "model": "pages.product",
+    "pk": 6,
+    "fields": {
+      "name": "BONAFIX Ultra 700 Yüksek Performanslı Mermer Granit Yapıştırıcısı 25kg",
+      "description": "Yüksek performanslı taş yapıştırıcı.",
+      "unit_price": "191.41",
+      "min_stock": 32,
+      "category": "Yapıştırıcı",
+      "current_qty": 2048,
+      "pallet_size": 64,
+      "image_static": "yuksekperformansli.jpg",
+      "created_at": "2025-10-05T12:00:00Z"
+    }
+  }
+]
